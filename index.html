@@ -3,21 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Holo Hands — Hand Tracking</title>
+    <title>Holo Hands — 3D Hologram Lab + Solar Eclipse Shader</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <div id="app">
-      <!-- Hidden raw video element used as source for MediaPipe and canvas rendering -->
+      <!-- Hidden raw video element used as source for MediaPipe and WebGL Shader -->
       <video id="webcam" autoplay playsinline muted></video>
-      <!-- Full-screen canvas for dimmed mirrored webcam + glowing hand landmarks -->
-      <canvas id="output-canvas"></canvas>
-      <!-- Full-screen transparent Three.js layer above the 2D canvas -->
+
+      <!-- Layer 1 (Background): Full-screen WebGL Webcam + Optional Sun / Eclipse / God-Ray Shader -->
+      <div id="bg-shader-container"></div>
+
+      <!-- Layer 2 (Middle): Full-screen 3D Holographic Shapes WebGL Canvas -->
       <div id="three-container"></div>
+
+      <!-- Layer 3 (Foreground): 2D Overlay Canvas for Glowing Hand Skeleton, Reticles & Beams -->
+      <canvas id="output-canvas"></canvas>
 
       <!-- Sleek Top Iron Man Hologram Status Bar -->
       <header id="top-bar" aria-label="Hologram Lab Status Bar">
-        <div class="top-bar-brand">STARK // HOLO-LAB MK.IV</div>
+        <div class="top-bar-brand">STARK // HOLO-LAB MK.V</div>
         <div class="top-bar-metrics">
           <div class="metric-pill">
             <span class="metric-dot" id="hands-dot"></span>
@@ -27,6 +32,10 @@
             <span class="metric-dot active-dot"></span>
             <span id="shapes-count">Active Shapes: 1</span>
           </div>
+          <div class="metric-pill" id="sun-status-pill">
+            <span class="metric-dot" id="sun-dot"></span>
+            <span id="sun-status-text">Sun: OFF</span>
+          </div>
         </div>
         <button id="clear-all-btn" type="button">
           <span class="clear-icon">✕</span>
@@ -34,31 +43,44 @@
         </button>
       </header>
 
-      <!-- Futuristic HUD Shape Spawner Menu on the left side -->
+      <!-- Compact Top-Left Holographic Toggle Menu + SUN Toggle Button -->
       <aside id="hud-menu" aria-label="Shape Spawner Menu">
-        <div class="hud-header">HOLO // SPAWNER</div>
-        <button class="hud-btn" data-shape="cube" type="button">
-          <span class="hud-icon">◇</span>
-          <span class="hud-label">Cube</span>
-        </button>
-        <button class="hud-btn" data-shape="sphere" type="button">
-          <span class="hud-icon">◯</span>
-          <span class="hud-label">Sphere</span>
-        </button>
-        <button class="hud-btn" data-shape="pyramid" type="button">
-          <span class="hud-icon">△</span>
-          <span class="hud-label">Pyramid</span>
-        </button>
-        <button class="hud-btn" data-shape="ring" type="button">
-          <span class="hud-icon">◎</span>
-          <span class="hud-label">Ring</span>
-        </button>
+        <div class="hud-top-controls">
+          <button id="shapes-toggle-btn" type="button" aria-expanded="false">
+            <span class="toggle-icon">+</span>
+            <span class="toggle-label">SHAPES</span>
+          </button>
+
+          <button id="sun-toggle-btn" type="button" aria-pressed="false">
+            <span class="sun-icon">☀</span>
+            <span class="sun-label">SUN</span>
+          </button>
+        </div>
+
+        <div id="shapes-drawer" aria-hidden="true">
+          <button class="hud-btn" data-shape="cube" type="button">
+            <span class="hud-icon">◇</span>
+            <span class="hud-label">Cube</span>
+          </button>
+          <button class="hud-btn" data-shape="sphere" type="button">
+            <span class="hud-icon">◯</span>
+            <span class="hud-label">Sphere</span>
+          </button>
+          <button class="hud-btn" data-shape="pyramid" type="button">
+            <span class="hud-icon">△</span>
+            <span class="hud-label">Pyramid</span>
+          </button>
+          <button class="hud-btn" data-shape="ring" type="button">
+            <span class="hud-icon">◎</span>
+            <span class="hud-label">Ring</span>
+          </button>
+        </div>
       </aside>
 
       <!-- Temporary Holographic Merge Label -->
       <div id="combine-banner" aria-live="polite"></div>
 
-      <div id="status-badge">Initializing MediaPipe Hands...</div>
+      <div id="status-badge">Initializing MediaPipe Hands & Selfie Segmenter...</div>
     </div>
     <script type="module" src="/main.js"></script>
   </body>
