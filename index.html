@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Holo Hands — Hand Tracking</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Hidden raw video element used as source for MediaPipe and canvas rendering -->
+      <video id="webcam" autoplay playsinline muted></video>
+      <!-- Full-screen canvas for dimmed mirrored webcam + glowing hand landmarks -->
+      <canvas id="output-canvas"></canvas>
+      <!-- Full-screen transparent Three.js layer above the 2D canvas -->
+      <div id="three-container"></div>
+
+      <!-- Sleek Top Iron Man Hologram Status Bar -->
+      <header id="top-bar" aria-label="Hologram Lab Status Bar">
+        <div class="top-bar-brand">STARK // HOLO-LAB MK.IV</div>
+        <div class="top-bar-metrics">
+          <div class="metric-pill">
+            <span class="metric-dot" id="hands-dot"></span>
+            <span id="hands-count">Hands Detected: 0/2</span>
+          </div>
+          <div class="metric-pill">
+            <span class="metric-dot active-dot"></span>
+            <span id="shapes-count">Active Shapes: 1</span>
+          </div>
+        </div>
+        <button id="clear-all-btn" type="button">
+          <span class="clear-icon">✕</span>
+          <span>Clear All</span>
+        </button>
+      </header>
+
+      <!-- Futuristic HUD Shape Spawner Menu on the left side -->
+      <aside id="hud-menu" aria-label="Shape Spawner Menu">
+        <div class="hud-header">HOLO // SPAWNER</div>
+        <button class="hud-btn" data-shape="cube" type="button">
+          <span class="hud-icon">◇</span>
+          <span class="hud-label">Cube</span>
+        </button>
+        <button class="hud-btn" data-shape="sphere" type="button">
+          <span class="hud-icon">◯</span>
+          <span class="hud-label">Sphere</span>
+        </button>
+        <button class="hud-btn" data-shape="pyramid" type="button">
+          <span class="hud-icon">△</span>
+          <span class="hud-label">Pyramid</span>
+        </button>
+        <button class="hud-btn" data-shape="ring" type="button">
+          <span class="hud-icon">◎</span>
+          <span class="hud-label">Ring</span>
+        </button>
+      </aside>
+
+      <!-- Temporary Holographic Merge Label -->
+      <div id="combine-banner" aria-live="polite"></div>
+
+      <div id="status-badge">Initializing MediaPipe Hands...</div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
